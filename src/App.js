@@ -75,7 +75,7 @@ export default class App extends Component {
             <div style={this.getStyle(data.completed)} key={data.id}>
             <input type="checkbox" defaultChecked={false} onChange={() => this.handleCompleteChange(data.id)} />
               {data.title}
-            <button style={this.btnStyle} onClick={() => this.handleCompleteChange(data.id)}>
+            <button style={this.btnStyle} onClick={() => this.handleClick(data.id)}>
               x
             </button>
           </div>
