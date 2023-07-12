@@ -13,6 +13,7 @@ const List = React.memo(
         return data;
       });
       setTodoData(newTodoData);
+      localStorage.setItem("todoData", JSON.stringify(newTodoData));
     };
 
     const handleClick = useCallback(
@@ -20,9 +21,28 @@ const List = React.memo(
         let newTodoData = todoData.filter((data) => data.id !== id);
         console.log("newTodoData", newTodoData);
         setTodoData(newTodoData);
+        localStorage.setItem("todoData", JSON.stringify(newTodoData));
       },
       [todoData]
     );
+
+    const handleEditChange = (event) => {
+      setEditedTitle(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+
+      let newTodoData = todoData.map((data) => {
+        if (data.id === id) {
+          data.title = editedTitle;
+        }
+        return data;
+      });
+      setTodoData(newTodoData);
+      localStorage.setItem("todoData", JSON.stringify(newTodoData));
+      setIsEditing(false);
+    };
 
     if (isEditing) {
       return (
@@ -30,21 +50,26 @@ const List = React.memo(
           className={`flex items-center justify-between w-full px-4 py-1 my-2 bg-gray-100 text-gray-600 border rounded`}
         >
           <div className="items-center">
-            <form>
+            <form onSubmit={handleSubmit}>
               <input
                 value={editedTitle}
+                onChange={handleEditChange}
                 className="w-full px-3 py-2 mr-4 text-gray-500 rounded"
               />
             </form>
           </div>
-          <div>
+          <div className="items-center">
             <button
               className="px-4 py-2 float-right"
               onClick={() => setIsEditing(false)}
             >
               x
             </button>
-            <button className="px-4 py-2 float-right" type="submit">
+            <button
+              onClick={handleSubmit}
+              className="px-4 py-2 float-right"
+              type="submit"
+            >
               save
             </button>
           </div>
